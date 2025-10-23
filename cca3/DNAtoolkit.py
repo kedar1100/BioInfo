@@ -2,6 +2,9 @@ import collections
 import random
 
 Nucleotide=["A","C","G","T"]
+NucleotideRNA=["T","G","C","A"]
+DNAReverseComplement={"A":'T','T':'A','G':'C','C':'G'}
+
 
 def validateSeq(dna_seq):
     tmpseq=dna_seq.upper()
@@ -19,7 +22,7 @@ def countNucFrequency(seq):
     # return dict(collections.Counter(seq))  
 
 # Q3
-def validateData(dna_seq):
+def validateAndDisplayDna(dna_seq):
     for nuc in dna_seq:
         if nuc not in Nucleotide:
             return False
@@ -30,3 +33,11 @@ def RandDNA(size):
     seq={}
     seq="".join(random.choice(Nucleotide) for _ in range(size))
     return seq
+# DNA -> RNA Transcription thymine with uracil
+def TranscriptionDNARNA(seq):
+    return seq.replace("T","U")
+
+
+def reverse_complement(seq):
+    return ''.join([DNAReverseComplement[nuc] for nuc in seq])[::-1]
+
