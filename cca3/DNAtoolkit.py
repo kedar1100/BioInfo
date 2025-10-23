@@ -21,12 +21,23 @@ def countNucFrequency(seq):
     return tmpFreqDict
     # return dict(collections.Counter(seq))  
 
+def countNucFrequencyPercentage(seq):
+    a=countNucFrequency(seq)
+    totalCount=sum(a.values())
+    percentageDict={key:(value/totalCount*100)for key, value in a.items()}
+    return percentageDict
+
 # Q3
 def validateAndDisplayDna(dna_seq):
     for nuc in dna_seq:
         if nuc not in Nucleotide:
             return False
     return dna_seq
+
+# def splitIntoCodon(seq):
+#     seq[]
+#     seq=''.join("|"for _ in range(3))
+#     return seq
 
 # Random dna generator to practice upon operations 
 def RandDNA(size):
@@ -39,5 +50,9 @@ def TranscriptionDNARNA(seq):
 
 
 def reverse_complement(seq):
-    return ''.join([DNAReverseComplement[nuc] for nuc in seq])[::-1]
+    # return ''.join([DNAReverseComplement[nuc] for nuc in seq])[::-1]
+
+    # optimizied and more pythonic code for the above function 
+    mapping=str.maketrans('ATGC','TACG')
+    return seq.translate(mapping)[::-1]
 
