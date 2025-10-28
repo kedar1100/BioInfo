@@ -1,6 +1,7 @@
 import collections 
 from collections import Counter
 import random
+from structure import DNACodon
 
 Nucleotide=["A","C","G","T"]
 NucleotideRNA=["T","G","C","A"]
@@ -73,9 +74,11 @@ def gcContentSubSeq(seq,k):
         res.append(gcContent(subseq))
     return res
 
-def gcSkew(seq):
+def GCSkew(seq):
     return ((seq.count("G")-seq.count("C"))/(seq.count("G")+seq.count("C")))
 
+def ATSkew(seq):
+    return((seq.count("A")-(seq.count("T")))/(seq.count("A"))+(seq.count("T")))
 
 def compareGcContent(seq):
     g=seq.count("G")
@@ -126,3 +129,53 @@ def checkCpGIsland(seq):
         return f"Not a CpG Island : low cpg rati {CpGRatio}"
     
     return f"Is a CpG Island CpG ratio: {CpGRatio}"
+
+def translateSeq(seq,init_pos=0):
+    return[DNACodon[seq[pos:pos+3]] for pos in range(init_pos,len(seq)-2,3)]
+
+def codonUsage(seq,aminoacid):
+    a=aminoacid.upper()
+    tmpList=[]
+    for i in range (0,len(seq)-2,3):
+        if DNACodon[seq[i:i+3]]==a:
+            tmpList.append(seq[i:i+3])
+    freqDict=dict(Counter(tmpList))
+    totalWeight=sum(freqDict.values())
+    for seq in freqDict:
+        freqDict[seq]=round(freqDict[seq]/totalWeight,2)
+    return freqDict
+
+def genReadingFrames(seq):
+    frames=[]
+    frames.append(translateSeq(seq,0))
+    frames.append(translateSeq(seq,1))
+    frames.append(translateSeq(seq,2))
+    frames.append(translateSeq(reverse_complement(seq),0))
+    frames.append(translateSeq(reverse_complement(seq),1))
+    frames.append(translateSeq(reverse_complement(seq),2))
+    return frames
+
+def proteinsFromRF(aa_seq):
+    currentProt=[]
+    proteins=[]
+    for aa in aa_seq:
+        if aa=="_":
+            if currentProt:
+                for p in currentProt:
+                    proteins.append(p)
+                currentProt=[]
+        else:
+            if aa=="M":
+                currentProt.append("")
+            for i in range(len(currentProt)):
+                currentProt[i]+=aa
+    return proteins
+
+# def allProteinFromORFS(seq,startReadPos=0,endReadPos=0):
+#     if endReadPos>startReadPos:
+#         rfs=genReadingFrames(seq[startReadPos:endReadPos])
+#     else:
+#         rfs=genReadingFrames(seq)
+    
+#     for rf in rfs:
+        
