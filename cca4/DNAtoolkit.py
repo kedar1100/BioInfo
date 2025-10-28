@@ -1,4 +1,5 @@
-import collections
+import collections 
+from collections import Counter
 import random
 
 Nucleotide=["A","C","G","T"]
@@ -81,24 +82,47 @@ def compareGcContent(seq):
     c=seq.count("C")
     return (((g+c)/len(seq))*100)
 
+
+# this function can be re written by you my boy , you are fucking smart and can do it 😉
+
 def dinucleotideFrequency(seq):
     # The total number of possible dinucleotides in a sequence of length L is L−1 (because each pair overlaps with the next, and you lose one potential pair at the end).
     seqLen=len(seq)-1
     count=[]
     i=0
+    freqList={}
     for i in range(seqLen):
         count.append(seq[i]+seq[i+1])
         i+=1
     return count
+    
 
 
-def trinucleotideFrequency(seq):
-    # The total number of possible dinucleotides in a sequence of length L is L−1 (because each pair overlaps with the next, and you lose one potential pair at the end).
-    seqLen=len(seq)-2
-    count=[]
-    i=0
-    for i in range(seqLen):
-        count.append(seq[i]+seq[i+1]+seq[i+2])
-        i+=1
-    return count
+def dinucleotide_frequency(sequence):
+    seq = ''.join([base for base in sequence.upper() if base in "ACGT"])
+    dinucs = [seq[i:i+2] for i in range(len(seq) - 1)]
+    counts = Counter(dinucs)
+    total = sum(counts.values())
+    freqs = {k: v / total for k, v in counts.items()}
+    
+    return counts, freqs
 
+def trinucleotideFrequency(sequence):
+    seq = ''.join([base for base in sequence.upper() if base in "ACGT"])
+    dinucs = [seq[i:i+2] for i in range(len(seq) - 2)]
+    counts = Counter(dinucs)
+    total = sum(counts.values())
+    freqs = {k: v / total for k, v in counts.items()}
+    return counts,freqs
+
+def checkCpGIsland(seq):
+    c=seq.count("C")
+    g=seq.count("G")
+    CpG=seq.count("CG")
+    L=len(seq)
+    expectedCpG=(c*g)/L
+    CpGRatio=CpG/expectedCpG
+    if CpGRatio<0.6:
+        return f"Not a CpG Island : low cpg rati {CpGRatio}"
+    
+    return f"Is a CpG Island CpG ratio: {CpGRatio}"
