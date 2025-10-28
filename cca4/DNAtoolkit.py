@@ -71,3 +71,34 @@ def gcContentSubSeq(seq,k):
         subseq=seq[i:i+k]
         res.append(gcContent(subseq))
     return res
+
+def gcSkew(seq):
+    return ((seq.count("G")-seq.count("C"))/(seq.count("G")+seq.count("C")))
+
+
+def compareGcContent(seq):
+    g=seq.count("G")
+    c=seq.count("C")
+    return (((g+c)/len(seq))*100)
+
+def dinucleotideFrequency(seq):
+    # The total number of possible dinucleotides in a sequence of length L is L−1 (because each pair overlaps with the next, and you lose one potential pair at the end).
+    seqLen=len(seq)-1
+    count=[]
+    i=0
+    for i in range(seqLen):
+        count.append(seq[i]+seq[i+1])
+        i+=1
+    return count
+
+
+def trinucleotideFrequency(seq):
+    # The total number of possible dinucleotides in a sequence of length L is L−1 (because each pair overlaps with the next, and you lose one potential pair at the end).
+    seqLen=len(seq)-2
+    count=[]
+    i=0
+    for i in range(seqLen):
+        count.append(seq[i]+seq[i+1]+seq[i+2])
+        i+=1
+    return count
+
